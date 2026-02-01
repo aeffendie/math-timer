@@ -4,7 +4,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Homepage from './components/Homepage';
 import Navbar from './components/Navbar';
-import './styles.css'; // Import the styles.css file
+import './App.css'; // Import the styles.css file
 
 function App() {
     return (
