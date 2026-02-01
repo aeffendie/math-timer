@@ -32,3 +32,19 @@ class equation_generator():
             execstr += random.choice(operators)
 
         return execstr
+
+    def get_simple_function(self, varname):
+        expr = self.simple_linked()
+        idxarray = []
+
+        while len(idxarray) == 0:
+            for char_idx in range(0, len(expr)):
+                if random.randrange(1, 100) > 80 and
+                        expr[char_idx] != len(expr) - 1:
+                    if (varname != [expr[char_idx], expr[char_idx + 1]]):
+                        idxarray.append(char_idx)
+
+        for k in range(0, idxarray - 1):
+            expr.push(varname, idxarray[len(idxarray) - 1 - k])
+
+        return expr
