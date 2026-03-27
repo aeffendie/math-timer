@@ -5,6 +5,8 @@ from sympy.parsing.latex import parse_latex
 class equation_generator():
     def __init__(self):
         self.bracket_tracker = 0
+        self.primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 
+                47, 51, 53, 61, 67, 71]
 
     # ---------- UTILITY ---------
 
@@ -26,8 +28,8 @@ class equation_generator():
             nonnull = 1
         return str(round(random.randrange(min, max)/nonnull, rounder))
     
-    def gen_float_num(self, min, max):
-        return str(random.uniform(min, max))
+    def gen_float_num(self, min, max, rounder):
+        return str(round(random.uniform(min, max), rounder))
 
     # ------------- ASSEMBLE EXPRESSIONS -----------
 
@@ -64,31 +66,36 @@ class equation_generator():
             return False
         return True
             
+    def token_assemble(self, tokenlist):
+        execstr = ''
+        for t in tokenlist:
+            execstr += t
+        return execstr
     
-    def simple_linked(self):    # TODO: brackets
+    def simple_linked(self):
         tokens = [
             'self.gen_natural_num(0, 1000)', 
             'self.gen_fractional_num(0, 1000, 4)', 
-            'self.gen_float_num(0, 1000)'
+            'self.gen_float_num(0, 1000, 4)'
         ]
-        execstr = ''
         operators = ['+', '-', '/', '*']
         firstsign = random.choice(['+', '-'])
+        constituents = []
     
         if firstsign == '-':
             execstr += firstsign
     
         n = random.randrange(1, 10, 1)
         for i in range(0, n):
-            execstr += self.bracket_picker('open')
-            execstr += self.get_token(tokens)
-            execstr += self.bracket_picker('closed')
-            execstr += random.choice(operators)
+            constituents.append(self.bracket_picker('open'))
+            constituents.append(self.get_token(tokens))
+            constituents.append(self.bracket_picker('closed'))
+            constituents.append(random.choice(operators))
 
-        execstr += self.get_token(tokens)
-        execstr = self.bracket_completer(execstr)
+        constituents.append(self.get_token(tokens))
+        constituents.append(self.bracket_completer(execstr))
 
-        return execstr
+        return constituents
 
     def get_simple_function(self, varname):
         expr = self.simple_linked()
@@ -96,9 +103,8 @@ class equation_generator():
         idxarray = []
 
         while len(idxarray) == 0:
-            for char_idx in range(0, len(expr)):
+            for char_idx in range(0, len(expr) - 1):
                 if random.randrange(1, 100) > 80 and expr[char_idx] != len(expr) - 1:
-                    print(expr)
                     if (varname != [expr[char_idx], expr[char_idx + 1]]):
                         idxarray.append(char_idx)
     
@@ -106,7 +112,12 @@ class equation_generator():
             expr += varname
 
         for k in range(0, len(idxarray) - 1):
-            expr = expr[:k] + varname + expr[k:]
+            expr = expr[:len(idxarray) - 1 - k] + varname + expr[len(idxarray) - 1 - k:]
+
+        if 'x' not in expr:
+            expr += ' = x'
+        else:
+            expr += ' = 0'
 
         return expr
 
@@ -116,7 +127,7 @@ class equation_generator():
         for i in range(0, n):
             prime = random.choice(self.primes)
             solution_parts.append(prime)
-            result *= random.choice(prime)
+            result *= prime
         return result, solution_parts
 
     def c_times_r_matrix(self, cols, rows, legal_entries):
@@ -125,9 +136,9 @@ class equation_generator():
         for c in range(0, cols):
             rowstr = ""
             for r in range(0, rows):
-                rowstr += self.get_token(self, legal_entries)
+                rowstr += self.get_token(legal_entries)
                 if r != rows - 1:
-                    rowstr += "&"
+                    rowstr += " & "
             ltx += rowstr
             if c != cols -1:
                 ltx += "\\\\"
