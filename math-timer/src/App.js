@@ -77,6 +77,33 @@ function nextProblem() {
     alert("submitted Solution!");
 }
 
+function getPage() {
+    return (
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" 
+                  content="width=device-width, initial-scale=1.0">
+        </head>
+        
+        <body>
+            <h1>a better name for a math trainer</h1>
+            <form id="math_trainer_form">
+                <div>
+                    <h3>Enter Solution</h3>
+                    <input type="text" 
+                           name="solution"
+                           id="solution_form">
+                </div>
+                <button type="submit">Add</button>
+            </form>
+            <div>
+                <h3 id="solution_form"></h3>
+            </div>
+            <script src="math_trainer_input.js"></script>   
+        </body>
+    );
+}
+
 function App() {
     const [posts, setPosts] = useState([]);
     var problem = null;
