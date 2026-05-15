@@ -79,10 +79,10 @@ function nextProblem() {
 
 function getPage() {
     return (
+        <>
         <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" 
-                  content="width=device-width, initial-scale=1.0">
+            <meta charset="UTF-8"></meta>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
         </head>
         
         <body>
@@ -92,7 +92,7 @@ function getPage() {
                     <h3>Enter Solution</h3>
                     <input type="text" 
                            name="solution"
-                           id="solution_form">
+                           id="solution_form"></input>
                 </div>
                 <button type="submit">Add</button>
             </form>
@@ -101,6 +101,7 @@ function getPage() {
             </div>
             <script src="math_trainer_input.js"></script>   
         </body>
+        </>
     );
 }
 
@@ -120,7 +121,7 @@ function App() {
             <>
                 <div>Under Construction</div>
                 <div>
-                    <button onClick={() => submitSolution}>Submit</button>
+                    <button onClick={() => submitSolution()}>Submit</button>
                 </div>
             </>
         );
@@ -128,7 +129,7 @@ function App() {
         return (
             <>
                 <div>
-                    <button>Next Problem</button>
+                    <button onClick={() => nextProblem()}>Next Problem</button>
                 </div>
             </>
         );
